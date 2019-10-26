@@ -1,0 +1,68 @@
+{
+  "default":"en",
+  "cz":{
+    "appName":"Kontrola baterie",
+    "cfgName":"Nastavení senzoru napětí",
+    "voltage":"Napětí:",
+    "windowSmall":"Napětí baterie",
+    "sensor":"Výběr senzoru napětí",
+    "selectSensor":"Vyberte senzor",
+    "triggerVoltage": "Spustit při napětí",
+    "warnVoltage": "Alarm při napětí pod",
+    "settleTime": "Čas ustálení napětí",
+    "warnAudio": "Varování baterie",
+    "modelName": "Název modelu"
+  },
+  "en":{
+    "appName":"Discharged Flightpack Warning",
+    "cfgName":"Flightpack Sensor Settings",
+    "voltage":"Voltage:",
+    "windowSmall":"Battery Voltage",
+    "sensor":"Voltage sensor selection",
+    "selectSensor":"Select sensor",
+    "triggerVoltage": "Trigger above",
+    "warnVoltage": "Warn if below",
+    "settleTime": "Voltage settle time",
+    "warnAudio": "Pack Warning",
+    "modelName": "Model Name"
+  },
+  "de":{
+    "appName":"Warnung Flugakku entladen",
+    "cfgName":"Akkusensor Einstellungen",
+    "voltage":"Spannung:",
+    "windowSmall":"Akkuspannung",
+    "sensor":"Spannungssensor Auswahl",
+    "selectSensor":"Sensorauswahl",
+    "triggerVoltage": "Triggerspannung",
+    "warnVoltage": "Warnspannung",
+    "settleTime": "Verzögerungszeit",
+    "warnAudio": "Sounddatei Warnung",
+    "modelName": "Modellname"
+  },
+  "fr":{
+    "appName":"Alerte décharge batterie",
+    "cfgName":"Réglage capteur batterie de vol",
+    "voltage":"Tension:",
+    "windowSmall":"Tension batterie",
+    "sensor":"Sélection du senseur de tension",
+    "selectSensor":"Sélection de senseur", 
+    "triggerVoltage": "Tension du capteur",
+    "warnVoltage": "Avertir si:",
+    "settleTime": "Temps de stabilisation tension",
+    "warnAudio": "Avertissement Pack",
+    "modelName": "Nom du modèle"
+  },
+   "it":{
+    "appName":"Allarme Batteria",
+    "cfgName":"Impostazione Sensore Batteria",
+    "voltage":"Voltaggio:",
+    "windowSmall":"Voltaggio Batteria",
+    "sensor":"Seleziona Sensore Voltaggio",
+    "selectSensor":"Scegli Sensore",
+    "triggerVoltage": "Attiva sopra",
+    "warnVoltage": "Avverti se inferiore a",
+    "settleTime": "Tempo attesa voltaggio",
+    "warnAudio": "Messaggio Allarme",
+    "modelName": "Nome Modello"
+  }
+}

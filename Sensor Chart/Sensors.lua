@@ -1,7 +1,7 @@
 -- ############################################################################# 
--- # DC-24 Sensor Chart - Lua application for JETI DC/DS transmitters 
+-- # DC/DS Sensor Chart - Lua application for JETI DC/DS transmitters 
 -- #
--- # Copyright (c) 2016, JETI model s.r.o.
+-- # Copyright (c) 2016 - 2017, JETI model s.r.o.
 -- # All rights reserved.
 -- #
 -- # Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,16 @@
 -- # either expressed or implied, of the FreeBSD Project.                    
 -- #                       
 -- # V1.0 - Initial release
+-- # V1.1 - Added choice of minimum sensor value
+-- # V1.2 - Text typo when using DC/DS-14/16
+-- # V1.3 - Improved translations to different languages
 -- #############################################################################
 
 
 --------------------------------------------------------------------
-local appName="DC-24 Sensor chart"
+local lang
 local sensorId, paramId
-local maximum
+local maximum,minimum
 local sensorsAvailable = {}
 local values = {}
 local latestVal
@@ -93,15 +96,22 @@ local getNextValue = emulator~=0 and randomGenerator() or getFromSensor()
 
 --------------------------------------------------------------------
 local function sensorChanged(value)
-  sensorId=sensorsAvailable[value].id
-  paramId=sensorsAvailable[value].param
-  system.pSave("sensor",sensorId)
-  system.pSave("param",paramId)      
+  if value>0 then
+    sensorId=sensorsAvailable[value].id
+    paramId=sensorsAvailable[value].param
+    system.pSave("sensor",sensorId)
+    system.pSave("param",paramId)
+  end      
 end
 
 local function maxChanged(value)
   maximum=value
   system.pSave("max",maximum)      
+end
+
+local function minChanged(value)
+  minimum=value
+  system.pSave("min",minimum)      
 end
 --------------------------------------------------------------------
 
@@ -122,14 +132,18 @@ local function initForm(formID)
       end
     end 
   end
-  form.addLabel({label="Sensor chart",font=2})
+  form.addLabel({label=lang.appName,font=2})
   form.addRow(2)
-  form.addLabel({label="Select sensor",width=120})
+  form.addLabel({label=lang.selectSensor,width=120})
   form.addSelectbox (list, curIndex,true,sensorChanged,{width=190})
   
   form.addRow(2)
-  form.addLabel({label="Maximum value"})
-  form.addIntbox (maximum, 0,32000,100,0,1,maxChanged)
+  form.addLabel({label=lang.maxValue})
+  form.addIntbox (maximum, -32000,32000,100,0,1,maxChanged)
+  
+  form.addRow(2)
+  form.addLabel({label=lang.minValue})
+  form.addIntbox (minimum, -32000,32000,100,0,1,minChanged)
 end  
 
 local function keyPressed(key)
@@ -144,12 +158,11 @@ end
 --------------------------------------------------------------------
 local function printTelemetry(width, height)
   -- Print current telemetry
-  lcd.setColor(0xAA,0xAA,0xAA)
-  lcd.drawFilledRectangle(160,74,158,84)
   lcd.setColor(lcd.getFgColor())
-  lcd.drawLine(162,98,308,98)
+  lcd.drawRectangle(160,74,158,84)
+  lcd.drawLine(165,98,308,98)
   lcd.setColor(0,0,0)
-  lcd.drawText(170,80,sensorlabel or "Value",FONT_BOLD)
+  lcd.drawText(170,80,sensorlabel or lang.value,FONT_BOLD)
   
   if(latestVal and latestVal ~= -100000) then
     local text = string.format("%.1f%s",latestVal,sensorunit or "")
@@ -163,7 +176,7 @@ local function printTelemetry(width, height)
   local offset = 11
   local lastV
   for i,v in pairs(values) do  
-    local v2=60-math.floor(v*60/maximum)
+    local v2=60-math.floor((v-minimum)*60/(maximum-minimum))
     if(lastV and lastV<65 and v ~= -100000) then  
       lcd.drawLine(offset,lastV,offset+3,v2)
       lcd.drawLine(offset,lastV-1,offset+3,v2-1)   
@@ -172,6 +185,18 @@ local function printTelemetry(width, height)
     lastV=v2
   end
 end 
+
+
+--------------------------------------------------------------------
+-- Configure language settings
+local function setLanguage()
+  local lng=system.getLocale();
+  local file = io.readall("Apps/Sensors/locale.jsn")
+  local obj = json.decode(file)
+  if(obj) then
+    lang = obj[lng] or obj[obj.default]
+  end
+end
  
 
 --------------------------------------------------------------------
@@ -180,16 +205,15 @@ local function init()
   sensorId = system.pLoad("sensor")
   paramId = system.pLoad("param")
   maximum = system.pLoad("max",100)
+  minimum = system.pLoad("min",0)
   
-  system.registerForm(1,MENU_TELEMETRY,appName,initForm,keyPressed,printForm);
-  system.registerTelemetry(1,"Telemetry chart",3,printTelemetry); 
+  system.registerForm(1,MENU_TELEMETRY,lang.appName,initForm,keyPressed,printForm);
+  system.registerTelemetry(1,lang.telChart,3,printTelemetry); 
   for i=1,100 do
     values[i] = -100000
   end   
 end
 
-
-  
 
 --------------------------------------------------------------------
 -- Loop function
@@ -205,5 +229,5 @@ end
  
 
 --------------------------------------------------------------------
-
-return { init=init, loop=loop, author="JETI model", version="1.00",name=appName}
+setLanguage()
+return { init=init, loop=loop, author="JETI model", version="1.3",name=lang.appName}

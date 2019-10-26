@@ -18,7 +18,7 @@
     "appName":"Vorflugcheck",
     "cfgName":"Vorflugcheck Einstellungen",
     "audio":"Audio",
-    "switch":"Switch",
+    "switch":"Schalter",
     "data":"data-de.jsn" 
   },
   "fr":{
@@ -27,6 +27,14 @@
     "audio":"Audio",
     "switch":"Interrupteur",
     "data":"data-fr.jsn" 
+  },
+  "it":{
+    "appName":"Checklist Prevolo",
+    "cfgName":"Regolazione parametri prevolo",
+    "audio":"Audio",
+    "switch":"Interruttore",
+    "data":"data-it.jsn" 
+
   },
   "es":{
     "appName":"Control Pre-vuelo",
